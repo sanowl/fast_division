@@ -1,50 +1,8 @@
 #include "fast_division/fast_division.h"
 #include <iostream>
-template <uint32_t divisor>
-void test32()
-{
-  std::cout << "(32-bit) testing " << divisor << std::endl;
-  for (uint32_t n = 1; n != 0; n++)
-  {
-    bool quotient_ok =
-        fast_division::divide32<divisor>::quotient(n) == n / divisor;
-    bool remainder_ok =
-        fast_division::divide32<divisor>::remainder(n) == n % divisor;
-    bool mult_ok =
-        fast_division::divide32<divisor>::is_divisible(n) == (n % divisor == 0);
-    if (!quotient_ok || !remainder_ok || !mult_ok)
-    {
-      std::cerr << "problem with n = " << n << std::endl;
-      std::cout << "quotient: " << fast_division::divide32<divisor>::quotient(n)
-                << " expected: " << n / divisor << std::endl;
-      std::cout << "remainder: "
-                << fast_division::divide32<divisor>::remainder(n)
-                << " expected: " << n % divisor << std::endl;
-      std::cout << "multiple: "
-                << fast_division::divide32<divisor>::is_divisible(n)
-                << " expected: " << (n % divisor == 0) << std::endl;
+#include <iomanip> // Added for setw
 
-      std::cout << "need_fallback = "
-                << fast_division::divide32<divisor>::need_fallback << std::endl;
-      std::cout << "is_power_2    = "
-                << fast_division::divide32<divisor>::is_power_2 << std::endl;
-      std::cout << "c             = " << fast_division::divide32<divisor>::c
-                << std::endl;
-      std::cout << "leading_zeroes= "
-                << fast_division::divide32<divisor>::leading_zeroes
-                << std::endl;
-      std::cout << "log2_divisor  = "
-                << fast_division::divide32<divisor>::log2_divisor << std::endl;
-      std::cout << "m             = " << fast_division::divide32<divisor>::m
-                << std::endl;
-      std::cout << "overflow      = "
-                << fast_division::divide32<divisor>::overflow << std::endl;
-
-      abort();
-    }
-  }
-}
-
+// Helper function to print large integers
 std::ostream &operator<<(std::ostream &dest, __uint128_t value)
 {
   std::ostream::sentry s(dest);
@@ -67,49 +25,73 @@ std::ostream &operator<<(std::ostream &dest, __uint128_t value)
   }
   return dest;
 }
-template <uint64_t divisor>
+
+template <uint32_t Divisor>
+void test32()
+{
+  std::cout << "(32-bit) Testing " << Divisor << std::endl;
+  for (uint32_t n = 1; n != 0; n++)
+  {
+    bool quotient_ok = fast_division::Divide32<Divisor>::CalculateQuotient(n) == n / Divisor;
+    bool remainder_ok = fast_division::Divide32<Divisor>::CalculateRemainder(n) == n % Divisor;
+    bool divisible_ok = fast_division::Divide32<Divisor>::IsDivisible(n) == (n % Divisor == 0);
+
+    if (!quotient_ok || !remainder_ok || !divisible_ok)
+    {
+      std::cerr << "Problem with n = " << n << std::endl;
+      std::cout << "Quotient: " << fast_division::Divide32<Divisor>::CalculateQuotient(n)
+                << " Expected: " << n / Divisor << std::endl;
+      std::cout << "Remainder: " << fast_division::Divide32<Divisor>::CalculateRemainder(n)
+                << " Expected: " << n % Divisor << std::endl;
+      std::cout << "Divisible: " << fast_division::Divide32<Divisor>::IsDivisible(n)
+                << " Expected: " << (n % Divisor == 0) << std::endl;
+
+      // Print additional information for debugging
+      std::cout << std::setw(15) << "Need fallback: " << fast_division::Divide32<Divisor>::NeedFallback << std::endl;
+      std::cout << std::setw(15) << "Is power of 2: " << fast_division::Divide32<Divisor>::IsPowerOf2 << std::endl;
+      std::cout << std::setw(15) << "C: " << fast_division::Divide32<Divisor>::C << std::endl;
+      std::cout << std::setw(15) << "Leading zeroes: " << fast_division::Divide32<Divisor>::LeadingZeroes << std::endl;
+      std::cout << std::setw(15) << "Log2 divisor: " << fast_division::Divide32<Divisor>::Log2Divisor << std::endl;
+      std::cout << std::setw(15) << "M: " << fast_division::Divide32<Divisor>::M << std::endl;
+      std::cout << std::setw(15) << "Overflow: " << fast_division::Divide32<Divisor>::Overflow << std::endl;
+
+      abort();
+    }
+  }
+}
+
+template <uint64_t Divisor>
 void test64()
 {
-  std::cout << "(64-bit) testing " << divisor << std::endl;
+  std::cout << "(64-bit) Testing " << Divisor << std::endl;
   for (uint64_t n = 1; n != 0; n++)
   {
     if (n == 1000000)
     {
       n = 0xFFFFFFFFFFFFFFFF - 1000000;
     }
-    bool quotient_ok =
-        fast_division::divide64<divisor>::quotient(n) == n / divisor;
-    bool remainder_ok =
-        fast_division::divide64<divisor>::remainder(n) == n % divisor;
-    bool mult_ok =
-        fast_division::divide64<divisor>::is_divisible(n) == (n % divisor == 0);
-    if (!quotient_ok || !remainder_ok || !mult_ok)
-    {
-      std::cerr << "problem with n = " << n << std::endl;
-      std::cout << "quotient: " << fast_division::divide64<divisor>::quotient(n)
-                << " expected: " << n / divisor << std::endl;
-      std::cout << "remainder: "
-                << fast_division::divide64<divisor>::remainder(n)
-                << " expected: " << n % divisor << std::endl;
-      std::cout << "multiple: "
-                << fast_division::divide64<divisor>::is_divisible(n)
-                << " expected: " << (n % divisor == 0) << std::endl;
+    bool quotient_ok = fast_division::Divide64<Divisor>::CalculateQuotient(n) == n / Divisor;
+    bool remainder_ok = fast_division::Divide64<Divisor>::CalculateRemainder(n) == n % Divisor;
+    bool divisible_ok = fast_division::Divide64<Divisor>::IsDivisible(n) == (n % Divisor == 0);
 
-      std::cout << "need_fallback = "
-                << fast_division::divide64<divisor>::need_fallback << std::endl;
-      std::cout << "is_power_2    = "
-                << fast_division::divide64<divisor>::is_power_2 << std::endl;
-      std::cout << "c             = " << fast_division::divide64<divisor>::c
-                << std::endl;
-      std::cout << "leading_zeroes= "
-                << fast_division::divide64<divisor>::leading_zeroes
-                << std::endl;
-      std::cout << "log2_divisor  = "
-                << fast_division::divide64<divisor>::log2_divisor << std::endl;
-      std::cout << "m             = " << fast_division::divide64<divisor>::m
-                << std::endl;
-      std::cout << "overflow      = "
-                << fast_division::divide64<divisor>::overflow << std::endl;
+    if (!quotient_ok || !remainder_ok || !divisible_ok)
+    {
+      std::cerr << "Problem with n = " << n << std::endl;
+      std::cout << "Quotient: " << fast_division::Divide64<Divisor>::CalculateQuotient(n)
+                << " Expected: " << n / Divisor << std::endl;
+      std::cout << "Remainder: " << fast_division::Divide64<Divisor>::CalculateRemainder(n)
+                << " Expected: " << n % Divisor << std::endl;
+      std::cout << "Divisible: " << fast_division::Divide64<Divisor>::IsDivisible(n)
+                << " Expected: " << (n % Divisor == 0) << std::endl;
+
+      // Print additional information for debugging
+      std::cout << std::setw(15) << "Need fallback: " << fast_division::Divide64<Divisor>::NeedFallback << std::endl;
+      std::cout << std::setw(15) << "Is power of 2: " << fast_division::Divide64<Divisor>::IsPowerOf2 << std::endl;
+      std::cout << std::setw(15) << "C: " << fast_division::Divide64<Divisor>::C << std::endl;
+      std::cout << std::setw(15) << "Leading zeroes: " << fast_division::Divide64<Divisor>::LeadingZeroes << std::endl;
+      std::cout << std::setw(15) << "Log2 divisor: " << fast_division::Divide64<Divisor>::Log2Divisor << std::endl;
+      std::cout << std::setw(15) << "M: " << fast_division::Divide64<Divisor>::M << std::endl;
+      std::cout << std::setw(15) << "Overflow: " << fast_division::Divide64<Divisor>::Overflow << std::endl;
 
       abort();
     }
@@ -118,7 +100,7 @@ void test64()
 
 int main()
 {
-
+  // Testing for various divisors
   test64<1000000001>();
   test64<1232445>();
   test64<67910>();
@@ -132,5 +114,8 @@ int main()
   test32<8>();
   test32<19>();
   test32<461>();
-  std::cout << "ok" << std::endl;
+
+  std::cout << "All tests passed successfully!" << std::endl;
+
+  return 0;
 }
