@@ -6,51 +6,51 @@
 namespace fast_division
 {
 
-  template <uint32_t divisor>
-  struct divide32
+  template <uint32_t Divisor>
+  struct Divide32
   {
-    constexpr static int leading_zeroes = __builtin_clz(divisor);
-    constexpr static int log2_divisor = 31 - leading_zeroes;
-    constexpr static bool is_power_2 = ((divisor & (divisor - 1)) == 0);
-    constexpr static uint32_t power_2_mask = ~uint32_t(int32_t(0x80000000) >> leading_zeroes);
+    constexpr static int LeadingZeroes = __builtin_clz(Divisor);
+    constexpr static int Log2Divisor = 31 - LeadingZeroes;
+    constexpr static bool IsPowerOf2 = ((Divisor & (Divisor - 1)) == 0);
+    constexpr static uint32_t PowerOf2Mask = ~uint32_t(int32_t(0x80000000) >> LeadingZeroes);
 
-    static inline uint32_t quotient(uint32_t n) noexcept
+    static inline uint32_t Quotient(uint32_t n) noexcept
     {
-      return is_power_2 ? n >> log2_divisor : n / divisor;
+      return IsPowerOf2 ? n >> Log2Divisor : n / Divisor;
     }
 
-    static inline uint32_t remainder(uint32_t n) noexcept
+    static inline uint32_t Remainder(uint32_t n) noexcept
     {
-      return is_power_2 ? n & power_2_mask : n % divisor;
+      return IsPowerOf2 ? n & PowerOf2Mask : n % Divisor;
     }
 
-    static inline bool is_divisible(uint32_t n) noexcept
+    static inline bool IsDivisible(uint32_t n) noexcept
     {
-      return is_power_2 ? (n & power_2_mask) == 0 : n % divisor == 0;
+      return IsPowerOf2 ? (n & PowerOf2Mask) == 0 : n % Divisor == 0;
     }
   };
 
-  template <uint64_t divisor>
-  struct divide64
+  template <uint64_t Divisor>
+  struct Divide64
   {
-    constexpr static int leading_zeroes = __builtin_clzll(divisor);
-    constexpr static int log2_divisor = 63 - leading_zeroes;
-    constexpr static bool is_power_2 = ((divisor & (divisor - 1)) == 0);
-    constexpr static uint64_t power_2_mask = ~uint64_t(int64_t(0x8000000000000000) >> leading_zeroes);
+    constexpr static int LeadingZeroes = __builtin_clzll(Divisor);
+    constexpr static int Log2Divisor = 63 - LeadingZeroes;
+    constexpr static bool IsPowerOf2 = ((Divisor & (Divisor - 1)) == 0);
+    constexpr static uint64_t PowerOf2Mask = ~uint64_t(int64_t(0x8000000000000000) >> LeadingZeroes);
 
-    static inline uint64_t quotient(uint64_t n) noexcept
+    static inline uint64_t Quotient(uint64_t n) noexcept
     {
-      return is_power_2 ? n >> log2_divisor : n / divisor;
+      return IsPowerOf2 ? n >> Log2Divisor : n / Divisor;
     }
 
-    static inline uint64_t remainder(uint64_t n) noexcept
+    static inline uint64_t Remainder(uint64_t n) noexcept
     {
-      return is_power_2 ? n & power_2_mask : n % divisor;
+      return IsPowerOf2 ? n & PowerOf2Mask : n % Divisor;
     }
 
-    static inline bool is_divisible(uint64_t n) noexcept
+    static inline bool IsDivisible(uint64_t n) noexcept
     {
-      return is_power_2 ? (n & power_2_mask) == 0 : n % divisor == 0;
+      return IsPowerOf2 ? (n & PowerOf2Mask) == 0 : n % Divisor == 0;
     }
   };
 
