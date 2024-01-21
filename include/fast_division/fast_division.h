@@ -6,6 +6,7 @@
 namespace fast_division
 {
 
+  // Structure for fast division of 32-bit unsigned integers
   template <uint32_t Divisor>
   struct Divide32
   {
@@ -14,22 +15,26 @@ namespace fast_division
     constexpr static bool IsPowerOf2 = ((Divisor & (Divisor - 1)) == 0);
     constexpr static uint32_t PowerOf2Mask = ~uint32_t(int32_t(0x80000000) >> LeadingZeroes);
 
+    // Calculate quotient
     static inline uint32_t Quotient(uint32_t n) noexcept
     {
       return IsPowerOf2 ? n >> Log2Divisor : n / Divisor;
     }
 
+    // Calculate remainder
     static inline uint32_t Remainder(uint32_t n) noexcept
     {
       return IsPowerOf2 ? n & PowerOf2Mask : n % Divisor;
     }
 
+    // Check if divisible
     static inline bool IsDivisible(uint32_t n) noexcept
     {
       return IsPowerOf2 ? (n & PowerOf2Mask) == 0 : n % Divisor == 0;
     }
   };
 
+  // Structure for fast division of 64-bit unsigned integers
   template <uint64_t Divisor>
   struct Divide64
   {
@@ -38,16 +43,19 @@ namespace fast_division
     constexpr static bool IsPowerOf2 = ((Divisor & (Divisor - 1)) == 0);
     constexpr static uint64_t PowerOf2Mask = ~uint64_t(int64_t(0x8000000000000000) >> LeadingZeroes);
 
+    // Calculate quotient
     static inline uint64_t Quotient(uint64_t n) noexcept
     {
       return IsPowerOf2 ? n >> Log2Divisor : n / Divisor;
     }
 
+    // Calculate remainder
     static inline uint64_t Remainder(uint64_t n) noexcept
     {
       return IsPowerOf2 ? n & PowerOf2Mask : n % Divisor;
     }
 
+    // Check if divisible
     static inline bool IsDivisible(uint64_t n) noexcept
     {
       return IsPowerOf2 ? (n & PowerOf2Mask) == 0 : n % Divisor == 0;
