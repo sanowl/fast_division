@@ -62,6 +62,9 @@ namespace fast_division
     }
   };
 
+  // Additional code for extra functionality
+  // ...
+
 } // namespace fast_division
 
 #endif
