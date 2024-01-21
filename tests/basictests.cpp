@@ -1,15 +1,19 @@
 #include "fast_division/fast_division.h"
 #include <iostream>
-template <uint32_t divisor> void test32() {
+template <uint32_t divisor>
+void test32()
+{
   std::cout << "(32-bit) testing " << divisor << std::endl;
-  for (uint32_t n = 1; n != 0; n++) {
+  for (uint32_t n = 1; n != 0; n++)
+  {
     bool quotient_ok =
         fast_division::divide32<divisor>::quotient(n) == n / divisor;
     bool remainder_ok =
         fast_division::divide32<divisor>::remainder(n) == n % divisor;
     bool mult_ok =
         fast_division::divide32<divisor>::is_divisible(n) == (n % divisor == 0);
-    if (!quotient_ok || !remainder_ok || !mult_ok) {
+    if (!quotient_ok || !remainder_ok || !mult_ok)
+    {
       std::cerr << "problem with n = " << n << std::endl;
       std::cout << "quotient: " << fast_division::divide32<divisor>::quotient(n)
                 << " expected: " << n / divisor << std::endl;
@@ -41,28 +45,36 @@ template <uint32_t divisor> void test32() {
   }
 }
 
-std::ostream &operator<<(std::ostream &dest, __uint128_t value) {
+std::ostream &operator<<(std::ostream &dest, __uint128_t value)
+{
   std::ostream::sentry s(dest);
-  if (s) {
+  if (s)
+  {
     __uint128_t tmp = value;
     char buffer[128];
     char *d = std::end(buffer);
-    do {
+    do
+    {
       --d;
       *d = "0123456789"[tmp % 10];
       tmp /= 10;
     } while (tmp != 0);
     int len = int(std::end(buffer) - d);
-    if (dest.rdbuf()->sputn(d, len) != len) {
+    if (dest.rdbuf()->sputn(d, len) != len)
+    {
       dest.setstate(std::ios_base::badbit);
     }
   }
   return dest;
 }
-template <uint64_t divisor> void test64() {
+template <uint64_t divisor>
+void test64()
+{
   std::cout << "(64-bit) testing " << divisor << std::endl;
-  for (uint64_t n = 1; n != 0; n++) {
-    if (n == 1000000) {
+  for (uint64_t n = 1; n != 0; n++)
+  {
+    if (n == 1000000)
+    {
       n = 0xFFFFFFFFFFFFFFFF - 1000000;
     }
     bool quotient_ok =
@@ -71,7 +83,8 @@ template <uint64_t divisor> void test64() {
         fast_division::divide64<divisor>::remainder(n) == n % divisor;
     bool mult_ok =
         fast_division::divide64<divisor>::is_divisible(n) == (n % divisor == 0);
-    if (!quotient_ok || !remainder_ok || !mult_ok) {
+    if (!quotient_ok || !remainder_ok || !mult_ok)
+    {
       std::cerr << "problem with n = " << n << std::endl;
       std::cout << "quotient: " << fast_division::divide64<divisor>::quotient(n)
                 << " expected: " << n / divisor << std::endl;
@@ -102,7 +115,9 @@ template <uint64_t divisor> void test64() {
     }
   }
 }
-int main() {
+
+int main()
+{
 
   test64<1000000001>();
   test64<1232445>();
